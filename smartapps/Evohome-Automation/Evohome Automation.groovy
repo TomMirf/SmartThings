@@ -31,14 +31,11 @@ preferences {
 		input "thermo", "capability.thermostat", title: "Which Thermostat?", submitOnChange: true
 	}
     if (thermo) {
-            // Do something here like update a message on the screen,
-            // or introduce more inputs. submitOnChange will refresh
-            // the page and allow the user to see the changes immediately.
-            // For example, you could prompt for the level of the dimmers
-            // if dimmers have been selected:
-
-            section {
-                input(name: "dimmerLevel", type: "number", title: "Level to dim lights to...", required: true)
+            // Do something here to list each SmartThings mode (e.g. Home,
+            // Away, Night etc.) and for each allow selection of the available
+            // modes for the thermostat selected above
+            //section {
+            //    input(name: "dimmerLevel", type: "number", title: "Level to dim lights to...", required: true)
             }
     }        
     section("Send a push message?") {
