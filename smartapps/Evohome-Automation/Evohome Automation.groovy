@@ -36,7 +36,7 @@ preferences {
             // modes for the thermostat selected above
             //section {
             //    input(name: "dimmerLevel", type: "number", title: "Level to dim lights to...", required: true)
-            }
+            //}
     }        
     section("Send a push message?") {
 		input "pushbool", "bool", title: "Push message?"
