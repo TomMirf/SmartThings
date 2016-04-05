@@ -9,7 +9,7 @@ This repository contains device handlers and SmartApps for use with Samsung's [S
 
 ### SmartApps
 
-* [Evohome Automation](https://github.com/codersaur/SmartThings/tree/master/smartapps/Evohome):
+* [Evohome Automation](https://github.com/codersaur/SmartThings/tree/master/smartapps/Evohome-Automation):
  - This SmartApp automates your Evohome within SmartThings.
 
 #### SmartApp Installation Procedure
