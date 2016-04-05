@@ -38,9 +38,11 @@ preferences {
             //    input(name: "dimmerLevel", type: "number", title: "Level to dim lights to...", required: true)
             //}
     }        
-    section("Send a push message?") {
-		input "pushbool", "bool", title: "Push message?"
-	}
+    section (title: "More options", hideable: true) {
+        input "pushbool", "bool", title: "Send a push notification?"
+        input "days", "enum", title: "Set for specific day(s) of the week", multiple: true, required: false,
+            options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    }
 }
 
 def installed()
@@ -62,29 +64,33 @@ def modeChangeHandler(evt) {
 	log.debug evt.value
 	def thermoSensorStateold = thermo.currentThermostatMode
 	log.debug "Old mode is $thermoSensorStateold"
-      
-    switch (evt.value) {
-    case "Away":
-        thermo?.setThermostatMode("Economy")
-        log.debug "Setting to Eco as AWAY"
-        notifications("Eco")
-        break
-    case "Home":
-        thermo?.setThermostatMode("auto")
-        log.debug "Setting to Auto as HOME"
-        notifications("Auto")
-        break
-    case "Holiday":
-        thermo?.setThermostatMode("off")
-        log.debug "Setting to Off as HOLIDAY"
-        notifications("Off")
-        break
-    default:
-        thermo?.setThermostatMode("auto")
-        log.debug "Setting to Auto as Default"
-        notifications("Auto")
-    }
-   	def thermoSensorStatenew = thermo.currentThermostatMode
+    log.debug "Days selected $days"
+    def temp = DaysOK
+    log.debug "Days ok? $temp"
+    //if (DaysOK){  
+    	switch (evt.value) {
+    	case "Away":
+        	thermo?.setThermostatMode("Economy")
+        	log.debug "Setting to Eco as AWAY"
+        	notifications("Eco")
+        	break
+    	case "Home":
+        	thermo?.setThermostatMode("auto")
+        	log.debug "Setting to Auto as HOME"
+        	notifications("Auto")
+        	break
+    	case "Holiday":
+        	thermo?.setThermostatMode("off")
+        	log.debug "Setting to Off as HOLIDAY"
+        	notifications("Off")
+        	break
+    	default:
+        	thermo?.setThermostatMode("auto")
+        	log.debug "Setting to Auto as Default"
+        	notifications("Auto")
+    	}
+   	//}
+    def thermoSensorStatenew = thermo.currentThermostatMode
 	log.debug "New mode is $thermoSensorStatenew"
 }
 
@@ -98,4 +104,22 @@ def notifications(evomode) {
         log.debug "Notification sent"
        	sendNotificationEvent("Evohome set to $evomode")
         }
- }  
+ }
+ 
+private getDaysOk() {
+	def result = true
+	if (days) {
+		def df = new java.text.SimpleDateFormat("EEEE")
+		if (location.timeZone) {
+			df.setTimeZone(location.timeZone)
+		}
+		else {
+			df.setTimeZone(TimeZone.getTimeZone("Europe/London"))
+		}
+		def day = df.format(new Date())
+		result = days.contains(day)
+	}
+	log.trace "daysOk = $result"
+    log.debug "daysOk = $result"
+	result
+}
