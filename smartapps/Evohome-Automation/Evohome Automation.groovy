@@ -72,38 +72,41 @@ def modeChangeHandler(evt) {
     	case "Away":
         	thermo?.setThermostatMode("Economy")
         	log.debug "Setting to Eco as AWAY"
-        	notifications("Eco")
+        	notifications("economy",thermoSensorStateold)
         	break
     	case "Home":
-        	thermo?.setThermostatMode("auto")
+        	thermo?.setThermostatMode("Auto")
         	log.debug "Setting to Auto as HOME"
-        	notifications("Auto")
+        	notifications("auto",thermoSensorStateold)
         	break
     	case "Holiday":
-        	thermo?.setThermostatMode("off")
+        	thermo?.setThermostatMode("Off")
         	log.debug "Setting to Off as HOLIDAY"
-        	notifications("Off")
+        	notifications("off",thermoSensorStateold)
         	break
     	default:
-        	thermo?.setThermostatMode("auto")
+        	thermo?.setThermostatMode("Auto")
         	log.debug "Setting to Auto as Default"
-        	notifications("Auto")
+        	notifications("auto",thermoSensorStateold)
     	}
    	//}
     def thermoSensorStatenew = thermo.currentThermostatMode
 	log.debug "New mode is $thermoSensorStatenew"
 }
 
-def notifications(evomode) {
+def notifications(evomode,evomodeold) {
 	log.debug "Push boolean is $pushbool"
-    if (pushbool == true) {
-    	log.debug "Push sent"
-        sendPush("Evohome set to $evomode")
-        }
-    else {
-        log.debug "Notification sent"
-       	sendNotificationEvent("Evohome set to $evomode")
-        }
+	log.debug "Old mode -$evomodeold- New mode -$evomode-"
+    if(evomode != evomodeold) {
+    	if (pushbool == true) {
+    		log.debug "Push sent"
+        	sendPush("Evohome set to $evomode")
+        	}
+    	else {
+        	log.debug "Notification sent"
+       		sendNotificationEvent("Evohome set to $evomode")
+        	}
+    	}	
  }
  
 private getDaysOk() {
